@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tuntutan Perubatan</title>
+<style>
+  :root{
+    --bg:#f4f6f5; --kad:#ffffff; --teks:#1c2524; --lembut:#5f6b69; --garis:#e2e7e5;
+    --utama:#0f766e; --utama-gelap:#0b5a54; --utama-cair:#e6f4f2;
+    --amber:#d97706; --amber-cair:#fef3c7; --merah:#c2410c; --merah-cair:#fde8dd;
+    --hijau:#15803d; --hijau-cair:#dcfce7; --bayang:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--teks);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .bar{background:var(--utama);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+  .jenama{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
+  .jenama span{background:#fff;color:var(--utama);width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:18px}
+  .bar button{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer}
+  main{max-width:880px;margin:0 auto;padding:20px 16px 60px}
+  .kad{background:var(--kad);border-radius:14px;box-shadow:var(--bayang);padding:20px;margin-bottom:16px}
+  h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:0 0 12px}
+  .kecil{color:var(--lembut);font-size:13px}
+  label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
+  input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--garis);border-radius:9px;font:inherit;background:#fff}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--utama-cair);border-color:var(--utama)}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:9px;padding:11px 18px;font:inherit;font-weight:600;cursor:pointer}
+  .btn-utama{background:var(--utama);color:#fff} .btn-utama:hover{background:var(--utama-gelap)}
+  .btn-garis{background:#fff;border:1px solid var(--garis);color:var(--teks)}
+  .btn-merah{background:var(--merah);color:#fff}
+  .btn:disabled{opacity:.6;cursor:wait}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  @media(max-width:600px){.grid2{grid-template-columns:1fr}}
+  .atas{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+
+  /* Kad baki */
+  .baki-besar{font-size:34px;font-weight:800;color:var(--utama);line-height:1.1}
+  .palang{height:14px;border-radius:99px;background:var(--utama-cair);display:flex;overflow:hidden;margin:14px 0 10px}
+  .palang i{display:block;height:100%}
+  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+  @media(max-width:600px){.statgrid{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--bg);border-radius:10px;padding:10px 12px}
+  .stat b{display:block;font-size:17px}
+  .titik{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+
+  /* Senarai tuntutan */
+  .tuntutan{border:1px solid var(--garis);border-radius:12px;padding:14px 16px;margin-top:12px}
+  .tuntutan-atas{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;cursor:pointer}
+  .amaun{font-weight:700;font-size:16px;text-align:right}
+  .lencana{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+  .s-proses{background:var(--amber-cair);color:var(--amber)} .s-lulus{background:var(--utama-cair);color:var(--utama)}
+  .s-bayar{background:var(--hijau-cair);color:var(--hijau)} .s-tolak{background:var(--merah-cair);color:var(--merah)}
+
+  /* Penjejak status */
+  .jejak{display:flex;margin:16px 0 4px}
+  .langkah{flex:1;text-align:center;position:relative;font-size:12px;color:var(--lembut)}
+  .langkah::before{content:"";position:absolute;top:13px;left:-50%;width:100%;height:3px;background:var(--garis);z-index:0}
+  .langkah:first-child::before{display:none}
+  .langkah.siap::before,.langkah.semasa::before,.langkah.tolak::before{background:var(--utama)}
+  .bulat{width:28px;height:28px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;background:#fff;border:3px solid var(--garis);position:relative;z-index:1;font-weight:700;font-size:13px}
+  .siap .bulat{background:var(--utama);border-color:var(--utama);color:#fff}
+  .semasa .bulat{border-color:var(--amber);color:var(--amber);animation:denyut 1.6s infinite}
+  .semasa{color:var(--amber);font-weight:700}
+  .tolak .bulat{background:var(--merah);border-color:var(--merah);color:#fff} .tolak{color:var(--merah);font-weight:700}
+  .siap{color:var(--teks)}
+  @keyframes denyut{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.35)}50%{box-shadow:0 0 0 6px rgba(217,119,6,0)}}
+
+  .butiran{display:none;border-top:1px dashed var(--garis);margin-top:12px;padding-top:12px;font-size:14px}
+  .tuntutan.buka .butiran{display:block}
+  .sejarah{list-style:none;margin:10px 0 0;padding:0}
+  .sejarah li{padding:6px 0 6px 14px;border-left:2px solid var(--garis);position:relative}
+  .sejarah li::before{content:"";position:absolute;left:-5px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--utama)}
+  dl.info{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;margin:0;font-size:14px}
+  dl.info dt{color:var(--lembut)} dl.info dd{margin:0;font-weight:600}
+  @media(max-width:500px){dl.info{grid-template-columns:1fr} dl.info dd{margin-bottom:6px}}
+  .amaran{background:var(--amber-cair);color:#7c4a03;padding:10px 12px;border-radius:9px;font-size:14px;margin-top:12px}
+  .kosong{text-align:center;color:var(--lembut);padding:30px 0}
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1c2524;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;z-index:20}
+  #toast.tunjuk{opacity:1} #toast.ralat{background:var(--merah)}
+  a{color:var(--utama)}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="jenama"><span>✚</span> Tuntutan Perubatan</div>
+  <button id="btnKeluar" hidden onclick="keluar()">Log Keluar</button>
+</header>
+<main id="app"><div class="kosong">Memuatkan…</div></main>
+<div id="toast"></div>
+
+<script>
+/* ====== TETAPAN: tampal URL Web App Apps Script di sini ====== */
+const API_URL = 'TAMPAL_URL_WEB_APP_DI_SINI';
+
+const app = document.getElementById('app');
+let sesi = null;   // {emel, noPekerja}
+let data = null;   // hasil login
+
+/* ---------- Util ---------- */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rm = n => 'RM' + Number(n || 0).toLocaleString('ms-MY', {minimumFractionDigits:2, maximumFractionDigits:2});
+const tarikhMY = s => { if(!s) return '-'; const [y,m,d] = s.slice(0,10).split('-'); return `${d}/${m}/${y}` + (s.length > 10 ? ' ' + s.slice(11) : ''); };
+function toast(msg, ralat){ const t = document.getElementById('toast'); t.textContent = msg; t.className = 'tunjuk' + (ralat ? ' ralat' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = '', 4000); }
+function simpanSesi(s){ try { s ? localStorage.setItem('stp_sesi', JSON.stringify(s)) : localStorage.removeItem('stp_sesi'); } catch(e){} }
+function bacaSesi(){ try { return JSON.parse(localStorage.getItem('stp_sesi') || 'null'); } catch(e){ return null; } }
+
+async function api(action, payload){
+  const res = await fetch(API_URL, { method:'POST', body: JSON.stringify(Object.assign({action}, payload)) });
+  const j = await res.json();
+  if(!j.ok) throw new Error(j.mesej || 'Ralat tidak diketahui');
+  return j;
+}
+
+function lencana(status){
+  const k = {'DALAM PROSES':'s-proses','DILULUSKAN':'s-lulus','DIBAYAR':'s-bayar','DITOLAK':'s-tolak'}[status] || 's-proses';
+  const label = {'DILULUSKAN':'DILULUSKAN – MENUNGGU BAYARAN'}[status] || status;
+  return `<span class="lencana ${k}">${esc(label)}</span>`;
+}
+
+/* Penjejak: Dihantar → peringkat 1..n */
+function penjejak(c, namaPeringkat){
+  const langkah = ['Dihantar'].concat(namaPeringkat);
+  return '<div class="jejak">' + langkah.map((nama, i) => {
+    let kelas = '', ikon = i + 1;
+    if (i === 0 || c.peringkat >= i) { kelas = 'siap'; ikon = '✓'; }
+    else if (i === c.peringkat + 1) {
+      if (c.status === 'DITOLAK') { kelas = 'tolak'; ikon = '✕'; }
+      else kelas = 'semasa';
+    }
+    return `<div class="langkah ${kelas}"><div class="bulat">${ikon}</div>${esc(nama)}</div>`;
+  }).join('') + '</div>';
+}
+
+function senaraiSejarah(sej){
+  return '<ul class="sejarah">' + (sej || []).map(h =>
+    `<li><b>${esc(h.tindakan)}</b> — ${esc(h.peringkat)}<br>
+     <span class="kecil">${tarikhMY(h.masa)} · ${esc(h.oleh)}</span>
+     ${h.catatan ? `<br><span class="kecil">“${esc(h.catatan)}”</span>` : ''}</li>`).join('') + '</ul>';
+}
+
+/* ---------- Paparan: Log masuk ---------- */
+function viewLogin(){
+  document.getElementById('btnKeluar').hidden = true;
+  app.innerHTML = `
+  <div class="kad" style="max-width:420px;margin:30px auto">
+    <h1>Log Masuk Staf</h1>
+    <p class="kecil">Semak baki peruntukan perubatan dan status tuntutan anda.</p>
+    <form id="fLogin">
+      <label>Emel</label><input name="emel" type="email" required autocomplete="email">
+      <label>No. Pekerja</label><input name="noPekerja" required>
+      <button class="btn btn-utama" style="width:100%;margin-top:18px;justify-content:center">Masuk</button>
+    </form>
+  </div>`;
+  document.getElementById('fLogin').onsubmit = async e => {
+    e.preventDefault();
+    const f = e.target, b = f.querySelector('button');
+    b.disabled = true; b.textContent = 'Menyemak…';
+    try {
+      sesi = { emel: f.emel.value.trim(), noPekerja: f.noPekerja.value.trim() };
+      await muatDashboard();
+      simpanSesi(sesi);
+    } catch(err){ toast(err.message, true); b.disabled = false; b.textContent = 'Masuk'; }
+  };
+}
+
+function keluar(){ sesi = null; data = null; simpanSesi(null); viewLogin(); }
+
+/* ---------- Paparan: Papan pemuka ---------- */
+async function muatDashboard(tahun){
+  data = await api('login', Object.assign({ tahun }, sesi));
+  viewDashboard();
+}
+
+function viewDashboard(){
+  document.getElementById('btnKeluar').hidden = false;
+  const s = data.staf, b = data.baki;
+  const pc = v => b.peruntukan > 0 ? Math.min(100, v / b.peruntukan * 100) : 0;
+  app.innerHTML = `
+  <div class="atas">
+    <div><h1>Salam, ${esc(s.nama)}</h1>
+      <div class="kecil">${esc(s.noPekerja)} · ${esc(s.jawatan)} · ${esc(s.bahagian)}</div></div>
+    <select id="pilihTahun" style="width:auto">${data.tahunAda.map(t => `<option ${t==data.tahun?'selected':''}>${t}</option>`).join('')}</select>
+  </div>
+
+  <div class="kad">
+    <div class="kecil">Baki boleh dituntut (${esc(data.tahun)})</div>
+    <div class="baki-besar">${rm(b.bolehTuntut)}</div>
+    <div class="palang">
+      <i style="width:${pc(b.digunakan)}%;background:var(--utama)"></i>
+      <i style="width:${pc(b.dalamProses)}%;background:var(--amber)"></i>
+    </div>
+    <div class="kecil"><span class="titik" style="background:var(--utama)"></span>Telah digunakan
+      &nbsp; <span class="titik" style="background:var(--amber)"></span>Dalam proses
+      &nbsp; <span class="titik" style="background:var(--utama-cair);border:1px solid var(--garis)"></span>Baki</div>
+    <div class="statgrid">
+      <div class="stat"><span class="kecil">Peruntukan</span><b>${rm(b.peruntukan)}</b></div>
+      <div class="stat"><span class="kecil">Telah digunakan</span><b>${rm(b.digunakan)}</b></div>
+      <div class="stat"><span class="kecil">Dalam proses</span><b>${rm(b.dalamProses)}</b></div>
+      <div class="stat"><span class="kecil">Baki boleh tuntut</span><b>${rm(b.bolehTuntut)}</b></div>
+    </div>
+  </div>
+
+  <div class="kad">
+    <div class="atas" style="margin-bottom:0">
+      <h2 style="margin:0">Tuntutan Saya (${data.tuntutan.length})</h2>
+      <button class="btn btn-utama" onclick="viewBorang()" ${b.bolehTuntut <= 0 ? 'disabled title="Baki telah habis"' : ''}>+ Tuntutan Baharu</button>
+    </div>
+    ${data.tuntutan.length ? data.tuntutan.map(kadTuntutan).join('') : '<div class="kosong">Tiada tuntutan untuk tahun ini.</div>'}
+  </div>`;
+  document.getElementById('pilihTahun').onchange = async e => {
+    try { await muatDashboard(e.target.value); } catch(err){ toast(err.message, true); }
+  };
+}
+
+function kadTuntutan(c){
+  return `
+  <div class="tuntutan" id="t-${esc(c.id)}">
+    <div class="tuntutan-atas" onclick="this.parentElement.classList.toggle('buka')">
+      <div><b>${esc(c.id)}</b> ${lencana(c.status)}
+        <div class="kecil">${tarikhMY(c.tarikhRawatan)} · ${esc(c.klinik)} · ${esc(c.jenis)}</div></div>
+      <div class="amaun">${rm(c.amaun)}
+        ${c.amaunLulus != null && c.amaunLulus !== c.amaun ? `<div class="kecil">Lulus ${rm(c.amaunLulus)}</div>` : ''}</div>
+    </div>
+    ${penjejak(c, data.peringkat)}
+    <div class="butiran">
+      <dl class="info">
+        <dt>Tarikh hantar</dt><dd>${tarikhMY(c.tarikhHantar)}</dd>
+        <dt>Catatan</dt><dd>${esc(c.catatan) || '-'}</dd>
+        <dt>Resit</dt><dd><a href="${esc(c.resit)}" target="_blank" rel="noopener">Lihat resit</a></dd>
+      </dl>
+      ${senaraiSejarah(c.sejarah)}
+    </div>
+  </div>`;
+}
+
+/* ---------- Paparan: Borang tuntutan baharu ---------- */
+function viewBorang(){
+  const b = data.baki, d = new Date(), hari = new Date(d - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  app.innerHTML = `
+  <div class="kad">
+    <div class="atas"><h1>Tuntutan Baharu</h1><button class="btn btn-garis" onclick="viewDashboard()">← Kembali</button></div>
+    <div class="amaran">Baki boleh dituntut tahun ${esc(data.tahun)}: <b>${rm(b.bolehTuntut)}</b></div>
+    <form id="fTuntut">
+      <div class="grid2">
+        <div><label>Tarikh rawatan</label><input type="date" name="tarikhRawatan" max="${hari}" required></div>
+        <div><label>Jenis rawatan</label><select name="jenis" required><option value="">— Pilih —</option>
+          ${data.jenisRawatan.map(j => `<option>${esc(j)}</option>`).join('')}</select></div>
+      </div>
+      <label>Nama klinik / hospital</label><input name="klinik" required>
+      <div class="grid2">
+        <div><label>Amaun (RM)</label><input type="number" name="amaun" step="0.01" min="0.01" required></div>
+        <div><label>Resit (PDF / gambar, maks 5MB)</label><input type="file" name="resit" accept="application/pdf,image/*" required></div>
+      </div>
+      <label>Catatan (pilihan)</label><textarea name="catatan" rows="3" placeholder="Contoh: rawatan demam, ubat untuk 3 hari"></textarea>
+      <div id="amaranAmaun"></div>
+      <button class="btn btn-utama" style="margin-top:18px">Hantar Tuntutan</button>
+    </form>
+  </div>`;
+  const f = document.getElementById('fTuntut');
+  f.amaun.oninput = () => {
+    document.getElementById('amaranAmaun').innerHTML = Number(f.amaun.value) > b.bolehTuntut
+      ? `<div class="amaran" style="background:var(--merah-cair);color:var(--merah)">Amaun melebihi baki boleh dituntut (${rm(b.bolehTuntut)}).</div>` : '';
+  };
+  f.onsubmit = async e => {
+    e.preventDefault();
+    const fail = f.resit.files[0];
+    if (!fail) return toast('Sila pilih resit.', true);
+    if (fail.size > 5 * 1024 * 1024) return toast('Saiz resit melebihi 5MB.', true);
+    if (Number(f.amaun.value) > b.bolehTuntut) return toast('Amaun melebihi baki boleh dituntut.', true);
+    // Tahun tuntutan ikut tarikh rawatan
+    const btn = f.querySelector('button[type=submit],button:not([type])');
+    btn.disabled = true; btn.textContent = 'Menghantar…';
+    try {
+      const base64 = await new Promise((ok, gagal) => {
+        const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = gagal; r.readAsDataURL(fail);
+      });
+      const j = await api('hantar', Object.assign({}, sesi, {
+        tarikhRawatan: f.tarikhRawatan.value, jenis: f.jenis.value, klinik: f.klinik.value,
+        amaun: f.amaun.value, catatan: f.catatan.value,
+        resit: { nama: fail.name, mimeType: fail.type, data: base64 }
+      }));
+      toast(j.mesej);
+      await muatDashboard(f.tarikhRawatan.value.slice(0,4));
+    } catch(err){ toast(err.message, true); btn.disabled = false; btn.textContent = 'Hantar Tuntutan'; }
+  };
+}
+
+/* ---------- Paparan: Tindakan pelulus (dari pautan emel) ---------- */
+async function viewTindakan(id, token){
+  document.getElementById('btnKeluar').hidden = true;
+  let j;
+  try { j = await api('semakTindakan', { id, token }); }
+  catch(err){ app.innerHTML = `<div class="kad kosong"><h2>Pautan tidak sah</h2><p>${esc(err.message)}</p></div>`; return; }
+  const c = j.tuntutan, b = j.baki, isKA = j.kodPeringkat === 'KA', isBayar = j.kodPeringkat === 'KEWANGAN';
+  app.innerHTML = `
+  <div class="kad">
+    <div class="kecil">Tindakan diperlukan</div>
+    <h1>${esc(j.peringkatSemasa)}</h1>
+    ${penjejak(c, j.peringkat)}
+  </div>
+  <div class="kad">
+    <h2>Butiran Tuntutan ${esc(c.id)}</h2>
+    <dl class="info">
+      <dt>Nama</dt><dd>${esc(c.nama)} (${esc(c.noPekerja)})</dd>
+      <dt>Bahagian</dt><dd>${esc(c.bahagian)}</dd>
+      <dt>Tarikh rawatan</dt><dd>${tarikhMY(c.tarikhRawatan)}</dd>
+      <dt>Klinik/Hospital</dt><dd>${esc(c.klinik)}</dd>
+      <dt>Jenis</dt><dd>${esc(c.jenis)}</dd>
+      <dt>Catatan</dt><dd>${esc(c.catatan) || '-'}</dd>
+      <dt>Amaun dituntut</dt><dd>${rm(c.amaun)}</dd>
+      ${c.amaunLulus != null ? `<dt>Amaun lulus</dt><dd>${rm(c.amaunLulus)}</dd>` : ''}
+      <dt>Resit</dt><dd><a href="${esc(c.resit)}" target="_blank" rel="noopener">Buka resit</a></dd>
+    </dl>
+    ${senaraiSejarah(c.sejarah)}
+  </div>
+  <div class="kad">
+    <h2>Peruntukan Staf (${esc(c.tahun)})</h2>
+    <div class="statgrid">
+      <div class="stat"><span class="kecil">Peruntukan</span><b>${rm(b.peruntukan)}</b></div>
+      <div class="stat"><span class="kecil">Telah digunakan</span><b>${rm(b.digunakan)}</b></div>
+      <div class="stat"><span class="kecil">Tuntutan lain dalam proses</span><b>${rm(b.dalamProses)}</b></div>
+      <div class="stat"><span class="kecil">Baki (sebelum tuntutan ini)</span><b>${rm(b.baki)}</b></div>
+    </div>
+    ${c.amaun > b.baki ? `<div class="amaran">Amaun dituntut melebihi baki peruntukan staf.</div>` : ''}
+  </div>
+  <div class="kad">
+    <h2>Keputusan</h2>
+    <form id="fKeputusan">
+      <label>Nama anda</label><input name="oleh" required>
+      ${isKA ? `<label>Amaun diluluskan (RM)</label>
+        <input type="number" name="amaunLulus" step="0.01" min="0.01" max="${Math.min(c.amaun, b.baki)}" value="${Math.min(c.amaun, b.baki).toFixed(2)}" required>` : ''}
+      <label>Catatan ${isBayar ? '(cth: no. baucar / tarikh bayaran)' : ''} <span class="kecil">— wajib jika tolak</span></label>
+      <textarea name="catatan" rows="3"></textarea>
+      <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+        <button type="button" class="btn btn-utama" data-k="LULUS">${isBayar ? '✓ Sahkan Telah Dibayar' : '✓ Lulus'}</button>
+        <button type="button" class="btn btn-merah" data-k="TOLAK">✕ Tolak</button>
+      </div>
+    </form>
+  </div>`;
+  const f = document.getElementById('fKeputusan');
+  f.querySelectorAll('button[data-k]').forEach(btn => btn.onclick = async () => {
+    const k = btn.dataset.k;
+    if (!f.oleh.value.trim()) return toast('Sila isi nama anda.', true);
+    if (k === 'TOLAK' && !f.catatan.value.trim()) return toast('Sila nyatakan sebab penolakan.', true);
+    if (!confirm(k === 'TOLAK' ? 'Tolak tuntutan ini?' : 'Sahkan keputusan?')) return;
+    f.querySelectorAll('button').forEach(x => x.disabled = true);
+    try {
+      const r = await api('putuskan', { id, token, keputusan: k, oleh: f.oleh.value,
+        catatan: f.catatan.value, amaunLulus: f.amaunLulus ? f.amaunLulus.value : '' });
+      app.innerHTML = `<div class="kad kosong"><h2>Terima kasih</h2><p>${esc(r.mesej)}</p><p class="kecil">Anda boleh tutup halaman ini.</p></div>`;
+    } catch(err){ toast(err.message, true); f.querySelectorAll('button').forEach(x => x.disabled = false); }
+  });
+}
+
+/* ---------- Mula ---------- */
+(async function mula(){
+  const q = new URLSearchParams(location.search);
+  if (q.get('tindakan')) return viewTindakan(q.get('tindakan'), q.get('t'));
+  sesi = bacaSesi();
+  if (!sesi) return viewLogin();
+  try { await muatDashboard(); } catch(err){ simpanSesi(null); viewLogin(); }
+})();
+</script>
+</body>
+</html>
