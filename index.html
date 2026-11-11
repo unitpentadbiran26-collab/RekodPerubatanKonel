@@ -101,8 +101,35 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const rm = n => 'RM' + Number(n || 0).toLocaleString('ms-MY', {minimumFractionDigits:2, maximumFractionDigits:2});
 const tarikhMY = s => { if(!s) return '-'; const [y,m,d] = s.slice(0,10).split('-'); return `${d}/${m}/${y}` + (s.length > 10 ? ' ' + s.slice(11) : ''); };
 function toast(msg, ralat){ const t = document.getElementById('toast'); t.textContent = msg; t.className = 'tunjuk' + (ralat ? ' ralat' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = '', 4000); }
-function simpanSesi(s){ try { s ? localStorage.setItem('stp_sesi', JSON.stringify(s)) : localStorage.removeItem('stp_sesi'); } catch(e){} }
-function bacaSesi(){ try { return JSON.parse(localStorage.getItem('stp_sesi') || 'null'); } catch(e){ return null; } }
+/* Sesi: disimpan dalam sessionStorage (hilang bila tab ditutup)
+   + auto log keluar jika tiada aktiviti selama MINIT_TAMAT minit */
+const MINIT_TAMAT = 15;
+try { localStorage.removeItem('stp_sesi'); } catch(e){}   // buang sesi lama (versi sebelum ini)
+function simpanSesi(s){
+  try {
+    if (s) { sessionStorage.setItem('stp_sesi', JSON.stringify(s)); tandaAktif(); }
+    else sessionStorage.removeItem('stp_sesi');
+  } catch(e){}
+}
+function bacaSesi(){
+  try {
+    const s = JSON.parse(sessionStorage.getItem('stp_sesi') || 'null');
+    const akhir = Number(sessionStorage.getItem('stp_aktif') || 0);
+    if (s && Date.now() - akhir > MINIT_TAMAT * 60000) { sessionStorage.removeItem('stp_sesi'); return null; }
+    return s;
+  } catch(e){ return null; }
+}
+let _aktif = Date.now();
+function tandaAktif(){ _aktif = Date.now(); try { sessionStorage.setItem('stp_aktif', String(_aktif)); } catch(e){} }
+['click','keydown','touchstart','scroll'].forEach(ev => addEventListener(ev, () => { if (sesi) tandaAktif(); }, {passive:true}));
+function semakTamat(){
+  if (sesi && Date.now() - _aktif > MINIT_TAMAT * 60000) {
+    keluar();
+    toast('Sesi tamat kerana tiada aktiviti selama ' + MINIT_TAMAT + ' minit. Sila log masuk semula.', true);
+  }
+}
+setInterval(semakTamat, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) semakTamat(); });
 
 async function api(action, payload){
   const res = await fetch(API_URL, { method:'POST', body: JSON.stringify(Object.assign({action}, payload)) });
