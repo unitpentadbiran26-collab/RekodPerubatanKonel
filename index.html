@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tuntutan Perubatan</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tuntutan">
 <style>
   :root{
     --bg:#f4f6f5; --kad:#ffffff; --teks:#1c2524; --lembut:#5f6b69; --garis:#e2e7e5;
@@ -90,7 +96,7 @@
 
 <script>
 /* ====== TETAPAN: tampal URL Web App Apps Script di sini ====== */
-const API_URL = 'https://script.google.com/macros/s/AKfycbxHdHemzO2WkGRBhZ-N4-OpsfL7Zn9gcMylqyYUI57j-SCZvauxPL1J91UalWiO_9oW/exec';
+const API_URL = 'TAMPAL_URL_WEB_APP_DI_SINI';
 
 const app = document.getElementById('app');
 let sesi = null;   // {emel, noPekerja}
@@ -292,24 +298,45 @@ function viewBorang(){
     e.preventDefault();
     const fail = f.resit.files[0];
     if (!fail) return toast('Sila pilih resit.', true);
-    if (fail.size > 5 * 1024 * 1024) return toast('Saiz resit melebihi 5MB.', true);
+    if (!/^image\//.test(fail.type) && fail.size > 5 * 1024 * 1024) return toast('Saiz resit melebihi 5MB.', true);
     if (Number(f.amaun.value) > b.bolehTuntut) return toast('Amaun melebihi baki boleh dituntut.', true);
-    // Tahun tuntutan ikut tarikh rawatan
     const btn = f.querySelector('button[type=submit],button:not([type])');
     btn.disabled = true; btn.textContent = 'Menghantar…';
     try {
-      const base64 = await new Promise((ok, gagal) => {
-        const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = gagal; r.readAsDataURL(fail);
-      });
+      const resit = await sediaResit(fail);
+      if (resit.data.length * 0.75 > 5 * 1024 * 1024) throw new Error('Saiz resit melebihi 5MB.');
       const j = await api('hantar', Object.assign({}, sesi, {
         tarikhRawatan: f.tarikhRawatan.value, jenis: f.jenis.value, klinik: f.klinik.value,
-        amaun: f.amaun.value, catatan: f.catatan.value,
-        resit: { nama: fail.name, mimeType: fail.type, data: base64 }
+        amaun: f.amaun.value, catatan: f.catatan.value, resit
       }));
       toast(j.mesej);
       await muatDashboard(f.tarikhRawatan.value.slice(0,4));
     } catch(err){ toast(err.message, true); btn.disabled = false; btn.textContent = 'Hantar Tuntutan'; }
   };
+}
+
+/* Sedia resit: gambar dikecilkan (maks 1600px, JPEG) supaya foto kamera telefon
+   tidak melebihi had; PDF dihantar seperti asal. */
+async function sediaResit(fail){
+  const bacaURL = blob => new Promise((ok, gagal) => {
+    const r = new FileReader(); r.onload = () => ok(String(r.result)); r.onerror = gagal; r.readAsDataURL(blob);
+  });
+  if (/^image\/(jpeg|jpg|png|webp)$/i.test(fail.type)) {
+    try {
+      const src = URL.createObjectURL(fail);
+      const img = await new Promise((ok, gagal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = gagal; i.src = src; });
+      const skala = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.naturalWidth * skala); cv.height = Math.round(img.naturalHeight * skala);
+      const ctx = cv.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.drawImage(img, 0, 0, cv.width, cv.height);
+      URL.revokeObjectURL(src);
+      return { nama: fail.name.replace(/\.[^.]+$/, '') + '.jpg', mimeType: 'image/jpeg',
+               data: cv.toDataURL('image/jpeg', 0.82).split(',')[1] };
+    } catch(e){ /* gagal kecilkan: guna fail asal */ }
+  }
+  return { nama: fail.name, mimeType: fail.type || 'application/octet-stream', data: (await bacaURL(fail)).split(',')[1] };
 }
 
 /* ---------- Paparan: Tindakan pelulus (dari pautan emel) ---------- */
@@ -377,6 +404,11 @@ async function viewTindakan(id, token){
       app.innerHTML = `<div class="kad kosong"><h2>Terima kasih</h2><p>${esc(r.mesej)}</p><p class="kecil">Anda boleh tutup halaman ini.</p></div>`;
     } catch(err){ toast(err.message, true); f.querySelectorAll('button').forEach(x => x.disabled = false); }
   });
+}
+
+/* ---------- PWA: daftar service worker (untuk "Install app") ---------- */
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
 /* ---------- Mula ---------- */
