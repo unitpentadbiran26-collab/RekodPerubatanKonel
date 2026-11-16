@@ -2,145 +2,262 @@
 <html lang="ms">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tuntutan Perubatan</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#0b5a54">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Tuntutan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f4f6f5; --kad:#ffffff; --teks:#1c2524; --lembut:#5f6b69; --garis:#e2e7e5;
-    --utama:#0f766e; --utama-gelap:#0b5a54; --utama-cair:#e6f4f2;
-    --amber:#d97706; --amber-cair:#fef3c7; --merah:#c2410c; --merah-cair:#fde8dd;
-    --hijau:#15803d; --hijau-cair:#dcfce7; --bayang:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.04);
+    --bg:#f2f5f4; --kad:#ffffff; --teks:#14211f; --lembut:#64748b; --garis:#e3e9e7;
+    --utama:#0f766e; --utama-gelap:#0b5a54; --utama-cair:#e3f3f0; --baki:#cde8e2;
+    --amber:#b45309; --amber-terang:#f59e0b; --amber-cair:#fef3c7;
+    --merah:#c2410c; --merah-cair:#fde8dd; --hijau:#15803d; --hijau-cair:#dcfce7;
+    --biru:#0369a1; --biru-cair:#e0f2fe;
+    --bayang:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.06);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--teks);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .bar{background:var(--utama);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
-  .jenama{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
-  .jenama span{background:#fff;color:var(--utama);width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:18px}
-  .bar button{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer}
-  main{max-width:880px;margin:0 auto;padding:20px 16px 60px}
-  .kad{background:var(--kad);border-radius:14px;box-shadow:var(--bayang);padding:20px;margin-bottom:16px}
-  h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:0 0 12px}
+  [hidden]{display:none!important}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--teks);font:15px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  button,input,select,textarea{font:inherit;color:inherit}
+  a{color:var(--utama)}
+
+  /* ---------- Bar atas ---------- */
+  .bar{background:linear-gradient(120deg,#0a4f4a,#0f766e 60%,#14917f);color:#fff;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+  .jenama{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo{background:#fff;display:grid;place-items:center;overflow:hidden;flex:none}
+  .logo img{width:100%;height:100%;object-fit:contain}
+  .logo.tiada::after{content:"✚";color:var(--utama);font-weight:800}
+  .logo-kecil{width:38px;height:38px;border-radius:11px;padding:3px}
+  .logo-kecil.tiada::after{font-size:20px}
+  .jenama b{display:block;font-size:15px;line-height:1.2;white-space:nowrap}
+  .jenama small{display:block;font-size:11.5px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-aksi{display:flex;gap:6px;flex:none}
+  .ikon-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:10px;height:36px;padding:0 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600}
+  .ikon-btn:hover{background:rgba(255,255,255,.25)}
+  .ikon-btn svg{width:17px;height:17px}
+  @media(max-width:520px){.ikon-btn span{display:none}.ikon-btn{padding:0 9px}}
+
+  main{max-width:940px;margin:0 auto;padding:18px 16px 70px}
+  .kad{background:var(--kad);border-radius:18px;box-shadow:var(--bayang);padding:20px;margin-bottom:16px}
+  h1{font-size:21px;margin:0 0 2px;letter-spacing:-.2px} h2{font-size:15.5px;margin:0 0 14px;letter-spacing:-.1px}
   .kecil{color:var(--lembut);font-size:13px}
   label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
-  input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--garis);border-radius:9px;font:inherit;background:#fff}
-  input:focus,select:focus,textarea:focus{outline:2px solid var(--utama-cair);border-color:var(--utama)}
-  .btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:9px;padding:11px 18px;font:inherit;font-weight:600;cursor:pointer}
+  input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--garis);border-radius:11px;background:#fff}
+  input:focus,select:focus,textarea:focus{outline:3px solid var(--utama-cair);border-color:var(--utama)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:11px;padding:11px 18px;font-weight:700;cursor:pointer;transition:background .15s,transform .05s}
+  .btn:active{transform:translateY(1px)}
   .btn-utama{background:var(--utama);color:#fff} .btn-utama:hover{background:var(--utama-gelap)}
   .btn-garis{background:#fff;border:1px solid var(--garis);color:var(--teks)}
   .btn-merah{background:var(--merah);color:#fff}
+  .btn-penuh{width:100%}
   .btn:disabled{opacity:.6;cursor:wait}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
   @media(max-width:600px){.grid2{grid-template-columns:1fr}}
-  .atas{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .atas{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .muncul{animation:muncul .35s ease both}
+  @keyframes muncul{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-  /* Kad baki */
-  .baki-besar{font-size:34px;font-weight:800;color:var(--utama);line-height:1.1}
-  .palang{height:14px;border-radius:99px;background:var(--utama-cair);display:flex;overflow:hidden;margin:14px 0 10px}
-  .palang i{display:block;height:100%}
-  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
-  @media(max-width:600px){.statgrid{grid-template-columns:1fr 1fr}}
-  .stat{background:var(--bg);border-radius:10px;padding:10px 12px}
-  .stat b{display:block;font-size:17px}
-  .titik{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+  /* ---------- Log masuk ---------- */
+  .skrin-login{min-height:calc(100vh - 140px);display:grid;place-items:center}
+  .kad-login{width:100%;max-width:400px;padding:32px 24px 26px}
+  .kad-login .kepala{text-align:center;margin-bottom:8px}
+  .logo-besar{width:96px;height:96px;border-radius:26px;margin:0 auto 14px;padding:8px;box-shadow:0 6px 20px rgba(15,118,110,.18);border:1px solid var(--garis)}
+  .logo-besar.tiada::after{font-size:46px}
+  .medan{position:relative}
+  .medan .ik{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#94a3b8;pointer-events:none}
+  .medan input{padding-left:40px}
+  .medan .lihat{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;padding:8px;cursor:pointer;color:#94a3b8;display:grid}
+  .medan .lihat svg{width:19px;height:19px}
+  .nota-login{text-align:center;margin-top:16px}
+  .peraturan{list-style:none;padding:0;margin:10px 0 0;font-size:13px;color:var(--lembut)}
+  .peraturan li{padding:2px 0} .peraturan li.ok{color:var(--hijau)} .peraturan li::before{content:"○ "} .peraturan li.ok::before{content:"✓ "}
 
-  /* Senarai tuntutan */
-  .tuntutan{border:1px solid var(--garis);border-radius:12px;padding:14px 16px;margin-top:12px}
+  /* ---------- Papan pemuka ---------- */
+  .salam{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .avatar{width:46px;height:46px;border-radius:50%;background:var(--utama-cair);color:var(--utama);display:grid;place-items:center;font-weight:800;flex:none}
+  .salam .isi{flex:1;min-width:0}
+  .salam h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .salam select{width:auto;padding:8px 10px}
+
+  .hero{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:center}
+  @media(max-width:640px){.hero{grid-template-columns:1fr;justify-items:center;text-align:center}}
+  .donut{position:relative;width:100%;max-width:220px;aspect-ratio:1}
+  .donut svg{width:100%;height:100%;display:block}
+  .donut .tengah{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none}
+  .donut .tengah small{font-size:12px;color:var(--lembut);font-weight:600}
+  .donut .tengah b{font-size:22px;line-height:1.15;color:var(--utama);letter-spacing:-.4px}
+  .donut .tengah span{font-size:12px;color:var(--lembut)}
+  .donut-kecil{max-width:170px}
+  .donut-kecil .tengah b{font-size:17px;color:var(--teks)}
+  .lengkung{transition:stroke-dasharray .8s ease}
+  .legenda{display:grid;gap:10px;width:100%}
+  .legenda .item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--bg)}
+  .legenda .titik{width:11px;height:11px;border-radius:4px;flex:none}
+  .legenda .lbl{flex:1;font-size:13.5px;text-align:left}
+  .legenda .nilai{font-weight:700;font-size:14px}
+  .legenda .pc{font-size:12px;color:var(--lembut);min-width:38px;text-align:right}
+  .legenda-kecil .item{padding:6px 8px;background:none;border-bottom:1px dashed var(--garis);border-radius:0}
+  .legenda-kecil .item:last-child{border-bottom:0}
+  .hero-tajuk{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  @media(max-width:640px){.hero-tajuk{justify-content:center}}
+
+  .statusgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  @media(max-width:640px){.statusgrid{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--kad);border-radius:16px;box-shadow:var(--bayang);padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .stat .ikon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none}
+  .stat .ikon svg{width:20px;height:20px}
+  .stat b{display:block;font-size:20px;line-height:1.1}
+  .stat span{font-size:12.5px;color:var(--lembut)}
+
+  .carta-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .carta-grid .kad{margin:0}
+  @media(max-width:760px){.carta-grid{grid-template-columns:1fr}}
+  .jenis-wrap{display:grid;grid-template-columns:170px 1fr;gap:16px;align-items:center}
+  @media(max-width:420px){.jenis-wrap{grid-template-columns:1fr;justify-items:center}}
+  .carta-bar{width:100%;height:auto;display:block}
+  .kosong-carta{color:#94a3b8;font-size:13px;text-align:center;padding:30px 0}
+
+  /* ---------- Senarai tuntutan ---------- */
+  .cip{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+  .cip button{border:1px solid var(--garis);background:#fff;border-radius:99px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;color:var(--lembut)}
+  .cip button.aktif{background:var(--utama);border-color:var(--utama);color:#fff}
+  .tuntutan{border:1px solid var(--garis);border-radius:14px;padding:14px 16px;margin-top:12px;transition:box-shadow .15s}
+  .tuntutan:hover{box-shadow:0 4px 14px rgba(16,24,40,.06)}
   .tuntutan-atas{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;cursor:pointer}
-  .amaun{font-weight:700;font-size:16px;text-align:right}
-  .lencana{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
-  .s-proses{background:var(--amber-cair);color:var(--amber)} .s-lulus{background:var(--utama-cair);color:var(--utama)}
+  .amaun{font-weight:800;font-size:16px;text-align:right}
+  .lencana{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px;vertical-align:middle;margin-left:4px}
+  .s-proses{background:var(--amber-cair);color:var(--amber)} .s-lulus{background:var(--biru-cair);color:var(--biru)}
   .s-bayar{background:var(--hijau-cair);color:var(--hijau)} .s-tolak{background:var(--merah-cair);color:var(--merah)}
 
-  /* Penjejak status */
   .jejak{display:flex;margin:16px 0 4px}
-  .langkah{flex:1;text-align:center;position:relative;font-size:12px;color:var(--lembut)}
+  .langkah{flex:1;text-align:center;position:relative;font-size:11.5px;color:var(--lembut);line-height:1.3;padding:0 2px}
   .langkah::before{content:"";position:absolute;top:13px;left:-50%;width:100%;height:3px;background:var(--garis);z-index:0}
   .langkah:first-child::before{display:none}
   .langkah.siap::before,.langkah.semasa::before,.langkah.tolak::before{background:var(--utama)}
   .bulat{width:28px;height:28px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;background:#fff;border:3px solid var(--garis);position:relative;z-index:1;font-weight:700;font-size:13px}
   .siap .bulat{background:var(--utama);border-color:var(--utama);color:#fff}
-  .semasa .bulat{border-color:var(--amber);color:var(--amber);animation:denyut 1.6s infinite}
+  .semasa .bulat{border-color:var(--amber-terang);color:var(--amber);animation:denyut 1.6s infinite}
   .semasa{color:var(--amber);font-weight:700}
   .tolak .bulat{background:var(--merah);border-color:var(--merah);color:#fff} .tolak{color:var(--merah);font-weight:700}
   .siap{color:var(--teks)}
-  @keyframes denyut{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.35)}50%{box-shadow:0 0 0 6px rgba(217,119,6,0)}}
+  @keyframes denyut{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.4)}50%{box-shadow:0 0 0 6px rgba(245,158,11,0)}}
 
   .butiran{display:none;border-top:1px dashed var(--garis);margin-top:12px;padding-top:12px;font-size:14px}
   .tuntutan.buka .butiran{display:block}
   .sejarah{list-style:none;margin:10px 0 0;padding:0}
   .sejarah li{padding:6px 0 6px 14px;border-left:2px solid var(--garis);position:relative}
   .sejarah li::before{content:"";position:absolute;left:-5px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--utama)}
-  dl.info{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;margin:0;font-size:14px}
+  dl.info{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;margin:0;font-size:14px}
   dl.info dt{color:var(--lembut)} dl.info dd{margin:0;font-weight:600}
   @media(max-width:500px){dl.info{grid-template-columns:1fr} dl.info dd{margin-bottom:6px}}
-  .amaran{background:var(--amber-cair);color:#7c4a03;padding:10px 12px;border-radius:9px;font-size:14px;margin-top:12px}
+  .amaran{background:var(--amber-cair);color:#7c4a03;padding:10px 12px;border-radius:11px;font-size:14px;margin-top:12px}
+  .amaran.merah{background:var(--merah-cair);color:var(--merah)}
   .kosong{text-align:center;color:var(--lembut);padding:30px 0}
-  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1c2524;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;z-index:20}
+  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
+  @media(max-width:600px){.statgrid{grid-template-columns:1fr 1fr}}
+  .statgrid .s{background:var(--bg);border-radius:11px;padding:10px 12px}
+  .statgrid .s b{display:block;font-size:16px}
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#14211f;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.2)}
   #toast.tunjuk{opacity:1} #toast.ralat{background:var(--merah)}
-  a{color:var(--utama)}
+  .memuat{display:grid;place-items:center;padding:80px 0;color:var(--lembut)}
+  .pusing{width:34px;height:34px;border:3px solid var(--utama-cair);border-top-color:var(--utama);border-radius:50%;animation:pusing .8s linear infinite;margin-bottom:10px}
+  @keyframes pusing{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <header class="bar">
-  <div class="jenama"><span>✚</span> Tuntutan Perubatan</div>
-  <button id="btnKeluar" hidden onclick="keluar()">Log Keluar</button>
+  <div class="jenama">
+    <div class="logo logo-kecil" id="logoBar"></div>
+    <div><b id="namaSistem"></b><small id="namaOrg"></small></div>
+  </div>
+  <div class="bar-aksi" id="barAksi" hidden>
+    <button class="ikon-btn" onclick="viewTukarKL(false)" title="Tukar kata laluan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.85 12.15 19 4M18 5l2 2M15 8l2 2"/></svg><span>Kata Laluan</span></button>
+    <button class="ikon-btn" onclick="keluar()" title="Log keluar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Log Keluar</span></button>
+  </div>
 </header>
-<main id="app"><div class="kosong">Memuatkan…</div></main>
+<main id="app"><div class="memuat"><div class="pusing"></div>Memuatkan…</div></main>
 <div id="toast"></div>
 
 <script>
-/* ====== TETAPAN: tampal URL Web App Apps Script di sini ====== */
-const API_URL = 'https://script.google.com/macros/s/AKfycbxHdHemzO2WkGRBhZ-N4-OpsfL7Zn9gcMylqyYUI57j-SCZvauxPL1J91UalWiO_9oW/exec';
+/* ======================= TETAPAN ======================= */
+const API_URL = 'TAMPAL_URL_WEB_APP_DI_SINI';   // URL Web App Apps Script (/exec)
+const NAMA_SISTEM = 'Tuntutan Perubatan';
+const NAMA_ORGANISASI = '';                      // cth: 'Koperasi Nelayan ...' (kosongkan jika tiada)
+const LOGO = 'logo.png';                         // fail logo dalam repo GitHub (PNG, latar lutsinar lebih cantik)
+const MINIT_TAMAT = 15;                          // auto log keluar jika tiada aktiviti
+
+const WARNA_JENIS = ['#0f766e','#0ea5e9','#8b5cf6','#f59e0b','#ec4899','#10b981','#64748b'];
+const BULAN = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 
 const app = document.getElementById('app');
-let sesi = null;   // {emel, noPekerja}
-let data = null;   // hasil login
+let token = null;       // token sesi dari server
+let data = null;        // data papan pemuka
+let tapis = 'SEMUA';    // penapis senarai tuntutan
+let klSementara = null; // kata laluan log masuk (dalam memori sahaja) untuk tukar kali pertama
 
-/* ---------- Util ---------- */
+/* ======================= UTIL ======================= */
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rm = n => 'RM' + Number(n || 0).toLocaleString('ms-MY', {minimumFractionDigits:2, maximumFractionDigits:2});
+const rmRingkas = n => { n = Number(n||0); return n >= 1000 ? (n/1000).toFixed(n >= 10000 ? 0 : 1) + 'k' : String(Math.round(n)); };
 const tarikhMY = s => { if(!s) return '-'; const [y,m,d] = s.slice(0,10).split('-'); return `${d}/${m}/${y}` + (s.length > 10 ? ' ' + s.slice(11) : ''); };
-function toast(msg, ralat){ const t = document.getElementById('toast'); t.textContent = msg; t.className = 'tunjuk' + (ralat ? ' ralat' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = '', 4000); }
-/* Sesi: disimpan dalam sessionStorage (hilang bila tab ditutup)
-   + auto log keluar jika tiada aktiviti selama MINIT_TAMAT minit */
-const MINIT_TAMAT = 15;
-try { localStorage.removeItem('stp_sesi'); } catch(e){}   // buang sesi lama (versi sebelum ini)
-function simpanSesi(s){
+const inisial = n => String(n||'').replace(/\b(bin|binti|bt|b\.|a\/l|a\/p)\b/gi,'').trim().split(/\s+/).slice(0,2).map(w => w[0] || '').join('').toUpperCase();
+function toast(msg, ralat){ const t = document.getElementById('toast'); t.textContent = msg; t.className = 'tunjuk' + (ralat ? ' ralat' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = '', 4500); }
+function logoHTML(kelas){ return `<div class="logo ${kelas}"><img src="${LOGO}" alt="" onerror="this.parentNode.classList.add('tiada');this.remove()"></div>`; }
+
+document.getElementById('logoBar').outerHTML = logoHTML('logo-kecil');
+document.getElementById('namaSistem').textContent = NAMA_SISTEM;
+document.getElementById('namaOrg').textContent = NAMA_ORGANISASI;
+
+/* ---------- Sesi: sessionStorage (hilang bila tab/app ditutup) + auto keluar ---------- */
+function simpanToken(t){
   try {
-    if (s) { sessionStorage.setItem('stp_sesi', JSON.stringify(s)); tandaAktif(); }
-    else sessionStorage.removeItem('stp_sesi');
+    if (t) { sessionStorage.setItem('stp_token', t); tandaAktif(); }
+    else sessionStorage.removeItem('stp_token');
+    localStorage.removeItem('stp_sesi');           // buang sesi versi lama
   } catch(e){}
 }
-function bacaSesi(){
+function bacaToken(){
   try {
-    const s = JSON.parse(sessionStorage.getItem('stp_sesi') || 'null');
+    const t = sessionStorage.getItem('stp_token');
     const akhir = Number(sessionStorage.getItem('stp_aktif') || 0);
-    if (s && Date.now() - akhir > MINIT_TAMAT * 60000) { sessionStorage.removeItem('stp_sesi'); return null; }
-    return s;
+    if (t && Date.now() - akhir > MINIT_TAMAT * 60000) { sessionStorage.removeItem('stp_token'); return null; }
+    return t;
   } catch(e){ return null; }
 }
 let _aktif = Date.now();
 function tandaAktif(){ _aktif = Date.now(); try { sessionStorage.setItem('stp_aktif', String(_aktif)); } catch(e){} }
-['click','keydown','touchstart','scroll'].forEach(ev => addEventListener(ev, () => { if (sesi) tandaAktif(); }, {passive:true}));
+['click','keydown','touchstart','scroll'].forEach(ev => addEventListener(ev, () => { if (token) tandaAktif(); }, {passive:true}));
 function semakTamat(){
-  if (sesi && Date.now() - _aktif > MINIT_TAMAT * 60000) {
+  if (token && Date.now() - _aktif > MINIT_TAMAT * 60000) {
     keluar();
-    toast('Sesi tamat kerana tiada aktiviti selama ' + MINIT_TAMAT + ' minit. Sila log masuk semula.', true);
+    toast('Sesi tamat kerana tiada aktiviti selama ' + MINIT_TAMAT + ' minit.', true);
   }
 }
 setInterval(semakTamat, 30000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) semakTamat(); });
 
 async function api(action, payload){
-  const res = await fetch(API_URL, { method:'POST', body: JSON.stringify(Object.assign({action}, payload)) });
-  const j = await res.json();
-  if(!j.ok) throw new Error(j.mesej || 'Ralat tidak diketahui');
+  const body = Object.assign({action}, payload);
+  if (token && !body.token && action !== 'semakTindakan' && action !== 'putuskan') body.token = token;
+  let j;
+  try {
+    const res = await fetch(API_URL, { method:'POST', body: JSON.stringify(body) });
+    j = await res.json();
+  } catch(e){ throw new Error('Tiada sambungan ke pelayan. Semak internet anda.'); }
+  if (!j.ok) {
+    if (j.kod === 'SESI_TAMAT' && action !== 'login') { keluar(true); }
+    throw new Error(j.mesej || 'Ralat tidak diketahui');
+  }
   return j;
 }
 
@@ -150,7 +267,6 @@ function lencana(status){
   return `<span class="lencana ${k}">${esc(label)}</span>`;
 }
 
-/* Penjejak: Dihantar → peringkat 1..n */
 function penjejak(c, namaPeringkat){
   const langkah = ['Dihantar'].concat(namaPeringkat);
   return '<div class="jejak">' + langkah.map((nama, i) => {
@@ -171,83 +287,253 @@ function senaraiSejarah(sej){
      ${h.catatan ? `<br><span class="kecil">“${esc(h.catatan)}”</span>` : ''}</li>`).join('') + '</ul>';
 }
 
-/* ---------- Paparan: Log masuk ---------- */
+/* ======================= CARTA (SVG) ======================= */
+// Carta donut/pai. segmen: [{nilai, warna, label}]
+function cartaDonut(segmen, tebal){
+  const S = 200, r = (S - tebal) / 2, lilitan = 2 * Math.PI * r;
+  const jumlah = segmen.reduce((a, s) => a + Math.max(0, s.nilai), 0);
+  const ada = segmen.filter(s => s.nilai > 0);
+  const jarak = ada.length > 1 ? 2 : 0;
+  let offset = 0, arka = '';
+  if (jumlah > 0) ada.forEach(s => {
+    const p = s.nilai / jumlah * lilitan;
+    arka += `<circle class="lengkung" cx="${S/2}" cy="${S/2}" r="${r}" fill="none" stroke="${s.warna}" stroke-width="${tebal}"
+      stroke-dasharray="${Math.max(0, p - jarak)} ${lilitan}" stroke-dashoffset="${-offset}"><title>${esc(s.label)}: ${rm(s.nilai)}</title></circle>`;
+    offset += p;
+  });
+  return `<svg viewBox="0 0 ${S} ${S}" role="img"><g transform="rotate(-90 ${S/2} ${S/2})">
+    <circle cx="${S/2}" cy="${S/2}" r="${r}" fill="none" stroke="#edf2f1" stroke-width="${tebal}"/>${arka}</g></svg>`;
+}
+
+// Carta bar bulanan
+function cartaBar(nilai, tahun){
+  const W = 360, H = 200, kiri = 6, bawah = 26, atas = 22;
+  const lebar = (W - kiri * 2) / 12, tinggi = H - bawah - atas, max = Math.max(...nilai, 0);
+  const sekarang = new Date(), bulanIni = String(sekarang.getFullYear()) === String(tahun) ? sekarang.getMonth() : -1;
+  let s = `<svg viewBox="0 0 ${W} ${H}" class="carta-bar" role="img" aria-label="Tuntutan bulanan">`;
+  for (let i = 0; i <= 3; i++) { const y = atas + tinggi * i / 3; s += `<line x1="${kiri}" x2="${W-kiri}" y1="${y}" y2="${y}" stroke="#eef2f1"/>`; }
+  nilai.forEach((v, i) => {
+    const h = max > 0 ? v / max * tinggi : 0, w = lebar * 0.58, x = kiri + i * lebar + (lebar - w) / 2, y = atas + tinggi - h;
+    if (v > 0) {
+      s += `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(h, 3)}" rx="5" fill="${i === bulanIni ? '#0f766e' : '#7cc4b8'}"><title>${BULAN[i]}: ${rm(v)}</title></rect>`;
+      s += `<text x="${x + w/2}" y="${y - 6}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#334155">${rmRingkas(v)}</text>`;
+    }
+    s += `<text x="${x + w/2}" y="${H - 8}" text-anchor="middle" font-size="10" fill="${i === bulanIni ? '#0f766e' : '#64748b'}" font-weight="${i === bulanIni ? 700 : 500}">${BULAN[i]}</text>`;
+  });
+  if (max === 0) s += `<text x="${W/2}" y="${atas + tinggi/2}" text-anchor="middle" font-size="12" fill="#94a3b8">Tiada tuntutan untuk tahun ini</text>`;
+  return s + '</svg>';
+}
+
+const ikon = {
+  proses:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  lulus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
+  bayar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/></svg>',
+  tolak:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>',
+  user:'<svg class="ik" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  kunci:'<svg class="ik" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  mata:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'
+};
+
+function medanKL(nama, placeholder, autocomplete){
+  return `<div class="medan">${ikon.kunci}<input type="password" name="${nama}" placeholder="${placeholder}" autocomplete="${autocomplete}" required>
+    <button type="button" class="lihat" aria-label="Tunjuk kata laluan" onclick="const i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'">${ikon.mata}</button></div>`;
+}
+
+/* ======================= LOG MASUK ======================= */
 function viewLogin(){
-  document.getElementById('btnKeluar').hidden = true;
+  document.getElementById('barAksi').hidden = true;
   app.innerHTML = `
-  <div class="kad" style="max-width:420px;margin:30px auto">
-    <h1>Log Masuk Staf</h1>
-    <p class="kecil">Semak baki peruntukan perubatan dan status tuntutan anda.</p>
-    <form id="fLogin">
-      <label>Emel</label><input name="emel" type="email" required autocomplete="email">
-      <label>No. Pekerja</label><input name="noPekerja" required>
-      <button class="btn btn-utama" style="width:100%;margin-top:18px;justify-content:center">Masuk</button>
-    </form>
+  <div class="skrin-login muncul">
+    <div class="kad kad-login">
+      <div class="kepala">
+        ${logoHTML('logo-besar')}
+        <h1>${esc(NAMA_SISTEM)}</h1>
+        <div class="kecil">${esc(NAMA_ORGANISASI || 'Log masuk untuk semak baki & status tuntutan')}</div>
+      </div>
+      <form id="fLogin" autocomplete="on">
+        <label>Nama Pengguna</label>
+        <div class="medan">${ikon.user}<input name="namaPengguna" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>
+        <label>Kata Laluan</label>
+        ${medanKL('kataLaluan', '', 'current-password')}
+        <button class="btn btn-utama btn-penuh" style="margin-top:20px">Log Masuk</button>
+      </form>
+      <div class="nota-login kecil">Lupa kata laluan? Hubungi Unit Pentadbiran.</div>
+    </div>
   </div>`;
-  document.getElementById('fLogin').onsubmit = async e => {
+  const f = document.getElementById('fLogin');
+  f.namaPengguna.focus();
+  f.onsubmit = async e => {
     e.preventDefault();
-    const f = e.target, b = f.querySelector('button');
+    const b = f.querySelector('button.btn');
     b.disabled = true; b.textContent = 'Menyemak…';
     try {
-      sesi = { emel: f.emel.value.trim(), noPekerja: f.noPekerja.value.trim() };
-      await muatDashboard();
-      simpanSesi(sesi);
-    } catch(err){ toast(err.message, true); b.disabled = false; b.textContent = 'Masuk'; }
+      const j = await api('login', { namaPengguna: f.namaPengguna.value.trim(), kataLaluan: f.kataLaluan.value });
+      token = j.token; simpanToken(token); data = j;
+      if (j.perluTukar) { klSementara = f.kataLaluan.value; viewTukarKL(true); }
+      else viewDashboard();
+    } catch(err){ toast(err.message, true); b.disabled = false; b.textContent = 'Log Masuk'; }
   };
 }
 
-function keluar(){ sesi = null; data = null; simpanSesi(null); viewLogin(); }
+function keluar(senyap){
+  if (token && !senyap) api('logout', {}).catch(() => {});
+  token = null; data = null; klSementara = null; simpanToken(null);
+  viewLogin();
+  if (senyap) toast('Sesi tamat. Sila log masuk semula.', true);
+}
 
-/* ---------- Paparan: Papan pemuka ---------- */
+/* ======================= TUKAR KATA LALUAN ======================= */
+function viewTukarKL(paksa){
+  document.getElementById('barAksi').hidden = paksa;
+  const perluLama = !(paksa && klSementara);
+  app.innerHTML = `
+  <div class="skrin-login muncul">
+    <div class="kad kad-login">
+      <div class="kepala">
+        <h1>${paksa ? 'Tetapkan Kata Laluan Baharu' : 'Tukar Kata Laluan'}</h1>
+        <div class="kecil">${paksa ? 'Ini log masuk pertama anda. Sila tetapkan kata laluan peribadi.' : 'Masukkan kata laluan semasa dan kata laluan baharu.'}</div>
+      </div>
+      <form id="fKL">
+        ${perluLama ? `<label>Kata Laluan Semasa</label>${medanKL('lama', '', 'current-password')}` : ''}
+        <label>Kata Laluan Baharu</label>${medanKL('baru', '', 'new-password')}
+        <label>Sahkan Kata Laluan Baharu</label>${medanKL('sahkan', '', 'new-password')}
+        <ul class="peraturan" id="peraturan">
+          <li data-r="panjang">Sekurang-kurangnya 8 aksara</li>
+          <li data-r="campur">Ada huruf dan nombor</li>
+          <li data-r="sama">Kedua-dua kata laluan sepadan</li>
+        </ul>
+        <button class="btn btn-utama btn-penuh" style="margin-top:18px">Simpan Kata Laluan</button>
+        ${paksa ? '' : '<button type="button" class="btn btn-garis btn-penuh" style="margin-top:10px" onclick="viewDashboard()">Batal</button>'}
+      </form>
+    </div>
+  </div>`;
+  const f = document.getElementById('fKL');
+  const semak = () => {
+    const b = f.baru.value, s = f.sahkan.value;
+    const r = { panjang: b.length >= 8, campur: /[A-Za-z]/.test(b) && /\d/.test(b), sama: b !== '' && b === s };
+    document.querySelectorAll('#peraturan li').forEach(li => li.classList.toggle('ok', r[li.dataset.r]));
+    return r.panjang && r.campur && r.sama;
+  };
+  f.baru.oninput = f.sahkan.oninput = semak;
+  f.onsubmit = async e => {
+    e.preventDefault();
+    if (!semak()) return toast('Kata laluan baharu belum memenuhi syarat.', true);
+    const btn = f.querySelector('button.btn-utama');
+    btn.disabled = true; btn.textContent = 'Menyimpan…';
+    try {
+      const j = await api('tukarKataLaluan', { lama: perluLama ? f.lama.value : klSementara, baru: f.baru.value });
+      klSementara = null;
+      toast(j.mesej);
+      await muatDashboard();
+    } catch(err){ toast(err.message, true); btn.disabled = false; btn.textContent = 'Simpan Kata Laluan'; }
+  };
+}
+
+/* ======================= PAPAN PEMUKA ======================= */
 async function muatDashboard(tahun){
-  data = await api('login', Object.assign({ tahun }, sesi));
+  data = await api('data', { tahun });
+  if (data.perluTukar) return viewTukarKL(true);
   viewDashboard();
 }
 
 function viewDashboard(){
-  document.getElementById('btnKeluar').hidden = false;
-  const s = data.staf, b = data.baki;
-  const pc = v => b.peruntukan > 0 ? Math.min(100, v / b.peruntukan * 100) : 0;
+  document.getElementById('barAksi').hidden = false;
+  const s = data.staf, b = data.baki, c = data.carta;
+  const peratus = v => b.peruntukan > 0 ? Math.round(v / b.peruntukan * 100) : 0;
+  const segPeruntukan = [
+    { label:'Telah digunakan', nilai:b.digunakan,   warna:'#0f766e' },
+    { label:'Dalam proses',    nilai:b.dalamProses, warna:'#f59e0b' },
+    { label:'Baki boleh tuntut', nilai:b.bolehTuntut, warna:'#cde8e2' }
+  ];
+  const segJenis = data.jenisRawatan.map((j, i) => ({ label:j, nilai:c.ikutJenis[j] || 0, warna:WARNA_JENIS[i % WARNA_JENIS.length] }))
+                    .filter(x => x.nilai > 0).sort((a, z) => z.nilai - a.nilai);
+  const jumlahJenis = segJenis.reduce((a, x) => a + x.nilai, 0);
+  const st = c.ikutStatus;
+
   app.innerHTML = `
-  <div class="atas">
-    <div><h1>Salam, ${esc(s.nama)}</h1>
+  <div class="salam muncul">
+    <div class="avatar">${esc(inisial(s.nama))}</div>
+    <div class="isi"><h1>Salam, ${esc(s.nama)}</h1>
       <div class="kecil">${esc(s.noPekerja)} · ${esc(s.jawatan)} · ${esc(s.bahagian)}</div></div>
-    <select id="pilihTahun" style="width:auto">${data.tahunAda.map(t => `<option ${t==data.tahun?'selected':''}>${t}</option>`).join('')}</select>
+    <select id="pilihTahun" aria-label="Tahun">${data.tahunAda.map(t => `<option ${t == data.tahun ? 'selected' : ''}>${t}</option>`).join('')}</select>
   </div>
 
-  <div class="kad">
-    <div class="kecil">Baki boleh dituntut (${esc(data.tahun)})</div>
-    <div class="baki-besar">${rm(b.bolehTuntut)}</div>
-    <div class="palang">
-      <i style="width:${pc(b.digunakan)}%;background:var(--utama)"></i>
-      <i style="width:${pc(b.dalamProses)}%;background:var(--amber)"></i>
-    </div>
-    <div class="kecil"><span class="titik" style="background:var(--utama)"></span>Telah digunakan
-      &nbsp; <span class="titik" style="background:var(--amber)"></span>Dalam proses
-      &nbsp; <span class="titik" style="background:var(--utama-cair);border:1px solid var(--garis)"></span>Baki</div>
-    <div class="statgrid">
-      <div class="stat"><span class="kecil">Peruntukan</span><b>${rm(b.peruntukan)}</b></div>
-      <div class="stat"><span class="kecil">Telah digunakan</span><b>${rm(b.digunakan)}</b></div>
-      <div class="stat"><span class="kecil">Dalam proses</span><b>${rm(b.dalamProses)}</b></div>
-      <div class="stat"><span class="kecil">Baki boleh tuntut</span><b>${rm(b.bolehTuntut)}</b></div>
+  <div class="kad muncul">
+    <div class="hero">
+      <div class="donut">${cartaDonut(segPeruntukan, 26)}
+        <div class="tengah"><small>Baki boleh tuntut</small><b>${rm(b.bolehTuntut)}</b><span>daripada ${rm(b.peruntukan)}</span></div>
+      </div>
+      <div style="width:100%">
+        <div class="hero-tajuk"><h2 style="margin:0">Peruntukan Perubatan ${esc(data.tahun)}</h2>
+          <span class="kecil">${peratus(b.digunakan + b.dalamProses)}% telah dituntut</span></div>
+        <div class="legenda">
+          ${segPeruntukan.map(x => `<div class="item"><span class="titik" style="background:${x.warna}"></span>
+            <span class="lbl">${x.label}</span><span class="nilai">${rm(x.nilai)}</span><span class="pc">${peratus(x.nilai)}%</span></div>`).join('')}
+        </div>
+        <button class="btn btn-utama btn-penuh" style="margin-top:14px" onclick="viewBorang()" ${b.bolehTuntut <= 0 ? 'disabled title="Baki telah habis"' : ''}>+ Tuntutan Baharu</button>
+      </div>
     </div>
   </div>
 
-  <div class="kad">
+  <div class="statusgrid muncul">
+    <div class="stat"><div class="ikon" style="background:var(--amber-cair);color:var(--amber)">${ikon.proses}</div><div><b>${st['DALAM PROSES'] || 0}</b><span>Dalam proses</span></div></div>
+    <div class="stat"><div class="ikon" style="background:var(--biru-cair);color:var(--biru)">${ikon.lulus}</div><div><b>${st['DILULUSKAN'] || 0}</b><span>Diluluskan</span></div></div>
+    <div class="stat"><div class="ikon" style="background:var(--hijau-cair);color:var(--hijau)">${ikon.bayar}</div><div><b>${st['DIBAYAR'] || 0}</b><span>Dibayar</span></div></div>
+    <div class="stat"><div class="ikon" style="background:var(--merah-cair);color:var(--merah)">${ikon.tolak}</div><div><b>${st['DITOLAK'] || 0}</b><span>Ditolak</span></div></div>
+  </div>
+
+  <div class="carta-grid muncul">
+    <div class="kad">
+      <h2>Tuntutan Ikut Jenis Rawatan</h2>
+      ${jumlahJenis > 0 ? `
+      <div class="jenis-wrap">
+        <div class="donut donut-kecil">${cartaDonut(segJenis, 34)}
+          <div class="tengah"><small>Jumlah</small><b>${rm(jumlahJenis)}</b></div></div>
+        <div class="legenda legenda-kecil">
+          ${segJenis.map(x => `<div class="item"><span class="titik" style="background:${x.warna}"></span>
+            <span class="lbl">${esc(x.label)}</span><span class="pc">${Math.round(x.nilai / jumlahJenis * 100)}%</span></div>`).join('')}
+        </div>
+      </div>` : '<div class="kosong-carta">Tiada tuntutan untuk tahun ini</div>'}
+    </div>
+    <div class="kad">
+      <h2>Tuntutan Bulanan ${esc(data.tahun)}</h2>
+      ${cartaBar(c.ikutBulan, data.tahun)}
+    </div>
+  </div>
+
+  <div class="kad muncul">
     <div class="atas" style="margin-bottom:0">
       <h2 style="margin:0">Tuntutan Saya (${data.tuntutan.length})</h2>
-      <button class="btn btn-utama" onclick="viewBorang()" ${b.bolehTuntut <= 0 ? 'disabled title="Baki telah habis"' : ''}>+ Tuntutan Baharu</button>
     </div>
-    ${data.tuntutan.length ? data.tuntutan.map(kadTuntutan).join('') : '<div class="kosong">Tiada tuntutan untuk tahun ini.</div>'}
+    <div class="cip" id="cip">
+      ${[['SEMUA','Semua'],['PROSES','Dalam proses'],['SELESAI','Lulus / Dibayar'],['DITOLAK','Ditolak']]
+        .map(([k, l]) => `<button data-k="${k}" class="${tapis === k ? 'aktif' : ''}">${l}</button>`).join('')}
+    </div>
+    <div id="senarai"></div>
   </div>`;
+
   document.getElementById('pilihTahun').onchange = async e => {
     try { await muatDashboard(e.target.value); } catch(err){ toast(err.message, true); }
   };
+  document.querySelectorAll('#cip button').forEach(btn => btn.onclick = () => {
+    tapis = btn.dataset.k;
+    document.querySelectorAll('#cip button').forEach(x => x.classList.toggle('aktif', x === btn));
+    lukisSenarai();
+  });
+  lukisSenarai();
+}
+
+function lukisSenarai(){
+  const padan = { SEMUA: () => true, PROSES: c => c.status === 'DALAM PROSES',
+    SELESAI: c => c.status === 'DILULUSKAN' || c.status === 'DIBAYAR', DITOLAK: c => c.status === 'DITOLAK' }[tapis];
+  const list = data.tuntutan.filter(padan);
+  document.getElementById('senarai').innerHTML = list.length ? list.map(kadTuntutan).join('')
+    : '<div class="kosong">Tiada tuntutan.</div>';
 }
 
 function kadTuntutan(c){
   return `
-  <div class="tuntutan" id="t-${esc(c.id)}">
+  <div class="tuntutan">
     <div class="tuntutan-atas" onclick="this.parentElement.classList.toggle('buka')">
       <div><b>${esc(c.id)}</b> ${lencana(c.status)}
         <div class="kecil">${tarikhMY(c.tarikhRawatan)} · ${esc(c.klinik)} · ${esc(c.jenis)}</div></div>
@@ -266,11 +552,11 @@ function kadTuntutan(c){
   </div>`;
 }
 
-/* ---------- Paparan: Borang tuntutan baharu ---------- */
+/* ======================= BORANG TUNTUTAN ======================= */
 function viewBorang(){
   const b = data.baki, d = new Date(), hari = new Date(d - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
   app.innerHTML = `
-  <div class="kad">
+  <div class="kad muncul">
     <div class="atas"><h1>Tuntutan Baharu</h1><button class="btn btn-garis" onclick="viewDashboard()">← Kembali</button></div>
     <div class="amaran">Baki boleh dituntut tahun ${esc(data.tahun)}: <b>${rm(b.bolehTuntut)}</b></div>
     <form id="fTuntut">
@@ -281,8 +567,8 @@ function viewBorang(){
       </div>
       <label>Nama klinik / hospital</label><input name="klinik" required>
       <div class="grid2">
-        <div><label>Amaun (RM)</label><input type="number" name="amaun" step="0.01" min="0.01" required></div>
-        <div><label>Resit (PDF / gambar, maks 5MB)</label><input type="file" name="resit" accept="application/pdf,image/*" required></div>
+        <div><label>Amaun (RM)</label><input type="number" name="amaun" step="0.01" min="0.01" inputmode="decimal" required></div>
+        <div><label>Resit (PDF / gambar)</label><input type="file" name="resit" accept="application/pdf,image/*" required></div>
       </div>
       <label>Catatan (pilihan)</label><textarea name="catatan" rows="3" placeholder="Contoh: rawatan demam, ubat untuk 3 hari"></textarea>
       <div id="amaranAmaun"></div>
@@ -292,7 +578,7 @@ function viewBorang(){
   const f = document.getElementById('fTuntut');
   f.amaun.oninput = () => {
     document.getElementById('amaranAmaun').innerHTML = Number(f.amaun.value) > b.bolehTuntut
-      ? `<div class="amaran" style="background:var(--merah-cair);color:var(--merah)">Amaun melebihi baki boleh dituntut (${rm(b.bolehTuntut)}).</div>` : '';
+      ? `<div class="amaran merah">Amaun melebihi baki boleh dituntut (${rm(b.bolehTuntut)}).</div>` : '';
   };
   f.onsubmit = async e => {
     e.preventDefault();
@@ -300,23 +586,22 @@ function viewBorang(){
     if (!fail) return toast('Sila pilih resit.', true);
     if (!/^image\//.test(fail.type) && fail.size > 5 * 1024 * 1024) return toast('Saiz resit melebihi 5MB.', true);
     if (Number(f.amaun.value) > b.bolehTuntut) return toast('Amaun melebihi baki boleh dituntut.', true);
-    const btn = f.querySelector('button[type=submit],button:not([type])');
+    const btn = f.querySelector('button.btn-utama');
     btn.disabled = true; btn.textContent = 'Menghantar…';
     try {
       const resit = await sediaResit(fail);
       if (resit.data.length * 0.75 > 5 * 1024 * 1024) throw new Error('Saiz resit melebihi 5MB.');
-      const j = await api('hantar', Object.assign({}, sesi, {
+      const j = await api('hantar', {
         tarikhRawatan: f.tarikhRawatan.value, jenis: f.jenis.value, klinik: f.klinik.value,
         amaun: f.amaun.value, catatan: f.catatan.value, resit
-      }));
+      });
       toast(j.mesej);
       await muatDashboard(f.tarikhRawatan.value.slice(0,4));
     } catch(err){ toast(err.message, true); btn.disabled = false; btn.textContent = 'Hantar Tuntutan'; }
   };
 }
 
-/* Sedia resit: gambar dikecilkan (maks 1600px, JPEG) supaya foto kamera telefon
-   tidak melebihi had; PDF dihantar seperti asal. */
+// Gambar dikecilkan (maks 1600px, JPEG) supaya foto kamera telefon tidak melebihi had; PDF dihantar seperti asal.
 async function sediaResit(fail){
   const bacaURL = blob => new Promise((ok, gagal) => {
     const r = new FileReader(); r.onload = () => ok(String(r.result)); r.onerror = gagal; r.readAsDataURL(blob);
@@ -334,20 +619,20 @@ async function sediaResit(fail){
       URL.revokeObjectURL(src);
       return { nama: fail.name.replace(/\.[^.]+$/, '') + '.jpg', mimeType: 'image/jpeg',
                data: cv.toDataURL('image/jpeg', 0.82).split(',')[1] };
-    } catch(e){ /* gagal kecilkan: guna fail asal */ }
+    } catch(e){ /* guna fail asal */ }
   }
   return { nama: fail.name, mimeType: fail.type || 'application/octet-stream', data: (await bacaURL(fail)).split(',')[1] };
 }
 
-/* ---------- Paparan: Tindakan pelulus (dari pautan emel) ---------- */
-async function viewTindakan(id, token){
-  document.getElementById('btnKeluar').hidden = true;
+/* ======================= TINDAKAN PELULUS (pautan emel) ======================= */
+async function viewTindakan(id, t){
+  document.getElementById('barAksi').hidden = true;
   let j;
-  try { j = await api('semakTindakan', { id, token }); }
+  try { j = await api('semakTindakan', { id, token: t }); }
   catch(err){ app.innerHTML = `<div class="kad kosong"><h2>Pautan tidak sah</h2><p>${esc(err.message)}</p></div>`; return; }
   const c = j.tuntutan, b = j.baki, isKA = j.kodPeringkat === 'KA', isBayar = j.kodPeringkat === 'KEWANGAN';
   app.innerHTML = `
-  <div class="kad">
+  <div class="kad muncul">
     <div class="kecil">Tindakan diperlukan</div>
     <h1>${esc(j.peringkatSemasa)}</h1>
     ${penjejak(c, j.peringkat)}
@@ -370,10 +655,10 @@ async function viewTindakan(id, token){
   <div class="kad">
     <h2>Peruntukan Staf (${esc(c.tahun)})</h2>
     <div class="statgrid">
-      <div class="stat"><span class="kecil">Peruntukan</span><b>${rm(b.peruntukan)}</b></div>
-      <div class="stat"><span class="kecil">Telah digunakan</span><b>${rm(b.digunakan)}</b></div>
-      <div class="stat"><span class="kecil">Tuntutan lain dalam proses</span><b>${rm(b.dalamProses)}</b></div>
-      <div class="stat"><span class="kecil">Baki (sebelum tuntutan ini)</span><b>${rm(b.baki)}</b></div>
+      <div class="s"><span class="kecil">Peruntukan</span><b>${rm(b.peruntukan)}</b></div>
+      <div class="s"><span class="kecil">Telah digunakan</span><b>${rm(b.digunakan)}</b></div>
+      <div class="s"><span class="kecil">Tuntutan lain dalam proses</span><b>${rm(b.dalamProses)}</b></div>
+      <div class="s"><span class="kecil">Baki (sebelum tuntutan ini)</span><b>${rm(b.baki)}</b></div>
     </div>
     ${c.amaun > b.baki ? `<div class="amaran">Amaun dituntut melebihi baki peruntukan staf.</div>` : ''}
   </div>
@@ -399,25 +684,24 @@ async function viewTindakan(id, token){
     if (!confirm(k === 'TOLAK' ? 'Tolak tuntutan ini?' : 'Sahkan keputusan?')) return;
     f.querySelectorAll('button').forEach(x => x.disabled = true);
     try {
-      const r = await api('putuskan', { id, token, keputusan: k, oleh: f.oleh.value,
+      const r = await api('putuskan', { id, token: t, keputusan: k, oleh: f.oleh.value,
         catatan: f.catatan.value, amaunLulus: f.amaunLulus ? f.amaunLulus.value : '' });
       app.innerHTML = `<div class="kad kosong"><h2>Terima kasih</h2><p>${esc(r.mesej)}</p><p class="kecil">Anda boleh tutup halaman ini.</p></div>`;
     } catch(err){ toast(err.message, true); f.querySelectorAll('button').forEach(x => x.disabled = false); }
   });
 }
 
-/* ---------- PWA: daftar service worker (untuk "Install app") ---------- */
+/* ======================= PWA & MULA ======================= */
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
-/* ---------- Mula ---------- */
 (async function mula(){
   const q = new URLSearchParams(location.search);
   if (q.get('tindakan')) return viewTindakan(q.get('tindakan'), q.get('t'));
-  sesi = bacaSesi();
-  if (!sesi) return viewLogin();
-  try { await muatDashboard(); } catch(err){ simpanSesi(null); viewLogin(); }
+  token = bacaToken();
+  if (!token) return viewLogin();
+  try { await muatDashboard(); } catch(err){ token = null; simpanToken(null); viewLogin(); }
 })();
 </script>
 </body>
