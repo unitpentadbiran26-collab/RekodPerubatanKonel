@@ -215,8 +215,8 @@ function toast(msg, ralat){ const t = document.getElementById('toast'); t.textCo
 function logoHTML(kelas){ return `<div class="logo ${kelas}"><img src="${LOGO}" alt="" onerror="this.parentNode.classList.add('tiada');this.remove()"></div>`; }
 
 document.getElementById('logoBar').outerHTML = logoHTML('logo-kecil');
-document.getElementById('namaSistem').textContent = Sistem Rekod Perubatan;
-document.getElementById('namaOrg').textContent = Korporasi Kemajuan Perikanan Dan Nelayan Sabah;
+document.getElementById('namaSistem').textContent = NAMA_SISTEM;
+document.getElementById('namaOrg').textContent = NAMA_ORGANISASI;
 
 /* ---------- Sesi: sessionStorage (hilang bila tab/app ditutup) + auto keluar ---------- */
 function simpanToken(t){
