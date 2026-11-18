@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tuntutan Perubatan</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b5a54">
+<meta name="theme-color" content="#0b1f3f">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,11 +15,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f2f5f4; --kad:#ffffff; --teks:#14211f; --lembut:#64748b; --garis:#e3e9e7;
-    --utama:#0f766e; --utama-gelap:#0b5a54; --utama-cair:#e3f3f0; --baki:#cde8e2;
+    --bg:#f1f4f9; --kad:#ffffff; --teks:#14211f; --lembut:#64748b; --garis:#e2e8f0;
+    --utama:#1d4e89; --utama-gelap:#0f2c59; --utama-cair:#e6eff9; --baki:#d3e3f4;
     --amber:#b45309; --amber-terang:#f59e0b; --amber-cair:#fef3c7;
     --merah:#c2410c; --merah-cair:#fde8dd; --hijau:#15803d; --hijau-cair:#dcfce7;
-    --biru:#0369a1; --biru-cair:#e0f2fe;
+    --biru:#0e7490; --biru-cair:#cffafe;
     --bayang:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.06);
   }
   *{box-sizing:border-box}
@@ -30,14 +30,15 @@
   a{color:var(--utama)}
 
   /* ---------- Bar atas ---------- */
-  .bar{background:linear-gradient(120deg,#0a4f4a,#0f766e 60%,#14917f);color:#fff;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+  .bar{background:linear-gradient(120deg,#0b1f3f,#13396b 55%,#1f6fa8);color:#fff;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px rgba(0,0,0,.1)}
   .jenama{display:flex;align-items:center;gap:10px;min-width:0}
   .logo{background:#fff;display:grid;place-items:center;overflow:hidden;flex:none}
   .logo img{width:100%;height:100%;object-fit:contain}
   .logo.tiada::after{content:"✚";color:var(--utama);font-weight:800}
   .logo-kecil{width:38px;height:38px;border-radius:11px;padding:3px}
   .logo-kecil.tiada::after{font-size:20px}
-  .jenama b{display:block;font-size:15px;line-height:1.2;white-space:nowrap}
+  .jenama > div:last-child{min-width:0}
+  .jenama b{overflow:hidden;text-overflow:ellipsis;display:block;font-size:15px;line-height:1.2;white-space:nowrap}
   .jenama small{display:block;font-size:11.5px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .bar-aksi{display:flex;gap:6px;flex:none}
   .ikon-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:10px;height:36px;padding:0 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600}
@@ -69,7 +70,7 @@
   .skrin-login{min-height:calc(100vh - 140px);display:grid;place-items:center}
   .kad-login{width:100%;max-width:400px;padding:32px 24px 26px}
   .kad-login .kepala{text-align:center;margin-bottom:8px}
-  .logo-besar{width:96px;height:96px;border-radius:26px;margin:0 auto 14px;padding:8px;box-shadow:0 6px 20px rgba(15,118,110,.18);border:1px solid var(--garis)}
+  .logo-besar{width:96px;height:96px;border-radius:26px;margin:0 auto 14px;padding:8px;box-shadow:0 6px 20px rgba(29,78,137,.18);border:1px solid var(--garis)}
   .logo-besar.tiada::after{font-size:46px}
   .medan{position:relative}
   .medan .ik{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#94a3b8;pointer-events:none}
@@ -196,7 +197,7 @@ const NAMA_ORGANISASI = 'Korporasi Kemajuan Perikanan Dan Nelayan Sabah';       
 const LOGO = 'logo.png';                         // fail logo dalam repo GitHub (PNG, latar lutsinar lebih cantik)
 const MINIT_TAMAT = 15;                          // auto log keluar jika tiada aktiviti
 
-const WARNA_JENIS = ['#0f766e','#0ea5e9','#8b5cf6','#f59e0b','#ec4899','#10b981','#64748b'];
+const WARNA_JENIS = ['#1d4e89','#0ea5e9','#8b5cf6','#f59e0b','#ec4899','#14b8a6','#64748b'];
 const BULAN = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 
 const app = document.getElementById('app');
@@ -302,7 +303,7 @@ function cartaDonut(segmen, tebal){
     offset += p;
   });
   return `<svg viewBox="0 0 ${S} ${S}" role="img"><g transform="rotate(-90 ${S/2} ${S/2})">
-    <circle cx="${S/2}" cy="${S/2}" r="${r}" fill="none" stroke="#edf2f1" stroke-width="${tebal}"/>${arka}</g></svg>`;
+    <circle cx="${S/2}" cy="${S/2}" r="${r}" fill="none" stroke="#edf2f8" stroke-width="${tebal}"/>${arka}</g></svg>`;
 }
 
 // Carta bar bulanan
@@ -311,14 +312,14 @@ function cartaBar(nilai, tahun){
   const lebar = (W - kiri * 2) / 12, tinggi = H - bawah - atas, max = Math.max(...nilai, 0);
   const sekarang = new Date(), bulanIni = String(sekarang.getFullYear()) === String(tahun) ? sekarang.getMonth() : -1;
   let s = `<svg viewBox="0 0 ${W} ${H}" class="carta-bar" role="img" aria-label="Tuntutan bulanan">`;
-  for (let i = 0; i <= 3; i++) { const y = atas + tinggi * i / 3; s += `<line x1="${kiri}" x2="${W-kiri}" y1="${y}" y2="${y}" stroke="#eef2f1"/>`; }
+  for (let i = 0; i <= 3; i++) { const y = atas + tinggi * i / 3; s += `<line x1="${kiri}" x2="${W-kiri}" y1="${y}" y2="${y}" stroke="#eef2f8"/>`; }
   nilai.forEach((v, i) => {
     const h = max > 0 ? v / max * tinggi : 0, w = lebar * 0.58, x = kiri + i * lebar + (lebar - w) / 2, y = atas + tinggi - h;
     if (v > 0) {
-      s += `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(h, 3)}" rx="5" fill="${i === bulanIni ? '#0f766e' : '#7cc4b8'}"><title>${BULAN[i]}: ${rm(v)}</title></rect>`;
+      s += `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(h, 3)}" rx="5" fill="${i === bulanIni ? '#1d4e89' : '#8fb8e6'}"><title>${BULAN[i]}: ${rm(v)}</title></rect>`;
       s += `<text x="${x + w/2}" y="${y - 6}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#334155">${rmRingkas(v)}</text>`;
     }
-    s += `<text x="${x + w/2}" y="${H - 8}" text-anchor="middle" font-size="10" fill="${i === bulanIni ? '#0f766e' : '#64748b'}" font-weight="${i === bulanIni ? 700 : 500}">${BULAN[i]}</text>`;
+    s += `<text x="${x + w/2}" y="${H - 8}" text-anchor="middle" font-size="10" fill="${i === bulanIni ? '#1d4e89' : '#64748b'}" font-weight="${i === bulanIni ? 700 : 500}">${BULAN[i]}</text>`;
   });
   if (max === 0) s += `<text x="${W/2}" y="${atas + tinggi/2}" text-anchor="middle" font-size="12" fill="#94a3b8">Tiada tuntutan untuk tahun ini</text>`;
   return s + '</svg>';
@@ -441,9 +442,9 @@ function viewDashboard(){
   const s = data.staf, b = data.baki, c = data.carta;
   const peratus = v => b.peruntukan > 0 ? Math.round(v / b.peruntukan * 100) : 0;
   const segPeruntukan = [
-    { label:'Telah digunakan', nilai:b.digunakan,   warna:'#0f766e' },
+    { label:'Telah digunakan', nilai:b.digunakan,   warna:'#1d4e89' },
     { label:'Dalam proses',    nilai:b.dalamProses, warna:'#f59e0b' },
-    { label:'Baki boleh tuntut', nilai:b.bolehTuntut, warna:'#cde8e2' }
+    { label:'Baki boleh tuntut', nilai:b.bolehTuntut, warna:'#d3e3f4' }
   ];
   const segJenis = data.jenisRawatan.map((j, i) => ({ label:j, nilai:c.ikutJenis[j] || 0, warna:WARNA_JENIS[i % WARNA_JENIS.length] }))
                     .filter(x => x.nilai > 0).sort((a, z) => z.nilai - a.nilai);
